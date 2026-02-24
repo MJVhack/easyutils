@@ -1,4 +1,3 @@
-# easyutils.py
 import argparse
 import json
 from pathlib import Path
@@ -7,8 +6,7 @@ from dependences import controltv
 CONFIG_FILE = Path.home() / ".tv_control.json"
 
 MODULES = {
-    "controltv": "Contrôle votre TV Android via ADB",
-    # tu pourras ajouter d'autres modules ici
+    "controltv": "Contrôle TV Android via ADB",
 }
 
 def save_ip(ip):
@@ -32,7 +30,6 @@ def main():
     args = parser.parse_args()
 
     if not args.module:
-        # aucun module → liste
         print("Modules disponibles :\n")
         for mod, desc in MODULES.items():
             print(f"  {mod} : {desc}")
@@ -44,9 +41,7 @@ def main():
         print(f"Module '{mod_name}' inconnu")
         return
 
-    # --- CLI ControlTV ---
     if mod_name == "controltv":
-        # si aucun argument → afficher aide
         if not args.args:
             print("ControlTV - commandes disponibles :")
             print("  ip <IP>                : enregistre l'adresse IP de la TV")
@@ -60,7 +55,7 @@ def main():
 
         cmd = args.args[0].lower()
 
-        # spécial : enregistrement IP
+
         if cmd == "ip":
             if len(args.args) < 2:
                 print("Erreur : IP requise")
@@ -77,7 +72,6 @@ def main():
 
         tv = controltv.TV(ip)
 
-        # touches simples
         simple_keys = ["reboot","volume_haut","volume_bas","ok","bas","haut","gauche",
                        "droite","home","menu","retour","mute","shutdown"]
         if cmd in simple_keys:
@@ -86,8 +80,6 @@ def main():
             else:
                 tv.base_control(cmd)
             return
-
-        # apps
         if cmd == "open_app":
             if len(args.args) < 2:
                 print("Erreur : nom de l'app requis")
@@ -102,7 +94,7 @@ def main():
             tv.manage_app("close", args.args[1].lower())
             return
 
-        # APK
+
         if cmd in ["install","rinstall"]:
             if len(args.args) < 2:
                 print("Erreur : fichier APK requis")
